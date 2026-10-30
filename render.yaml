@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: borcelle
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 24.14.0
+      - key: NODE_ENV
+        value: production
+      - key: BORCELLE_ADMIN_LOGIN
+        sync: false
+      - key: BORCELLE_ADMIN_PASSWORD
+        sync: false
+      - key: BORCELLE_SESSION_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: borcelle-db
+          property: connectionString
+
+databases:
+  - name: borcelle-db
+    plan: free
+    databaseName: borcelle
+    user: borcelle

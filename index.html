@@ -1,0 +1,1002 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#171312" />
+    <meta name="description" content="Borcelle — ресторан авторской кухни. Сезонное меню, внимательный сервис и бронирование столика онлайн." />
+    <title>Borcelle — ресторан авторской кухни</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #211a18;
+        --paper: #f5f0e8;
+        --paper-bright: #fbf9f5;
+        --wine: #542b32;
+        --wine-deep: #211416;
+        --copper: #cf8c67;
+        --sage: #7c8871;
+        --muted: #746b65;
+        --line: rgba(33, 26, 24, 0.16);
+        --serif: 'Cormorant Garamond', Georgia, serif;
+        --sans: 'Manrope', sans-serif;
+      }
+
+      *, *::before, *::after { box-sizing: border-box; }
+      html { scroll-behavior: smooth; scroll-padding-top: 92px; }
+      body { margin: 0; min-width: 320px; color: var(--ink); background: var(--paper-bright); font-family: var(--sans); font-size: 15px; line-height: 1.65; }
+      body.menu-open { overflow: hidden; }
+      img { display: block; max-width: 100%; }
+      a { color: inherit; text-decoration: none; }
+      button, input, select, textarea { font: inherit; }
+      button { cursor: pointer; }
+      button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--copper); outline-offset: 4px; }
+      .wrap { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+      .eyebrow { margin: 0 0 18px; color: var(--copper); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+      .display { margin: 0; font-family: var(--serif); font-weight: 500; line-height: .98; }
+      .section-title { font-size: clamp(44px, 6vw, 76px); }
+      .section-copy { max-width: 520px; color: var(--muted); }
+
+      .site-header { position: absolute; z-index: 10; inset: 0 0 auto; color: #fffaf3; }
+      .header-inner { min-height: 88px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.2); }
+      .brand { display: inline-flex; align-items: center; gap: 11px; font-family: var(--serif); font-size: 29px; line-height: 1; }
+      .brand-mark { width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid var(--copper); border-radius: 50%; color: var(--copper); font-size: 18px; }
+      .desktop-nav { display: flex; align-items: center; gap: 32px; font-size: 12px; }
+      .desktop-nav a, .footer-links a { transition: color .2s ease; }
+      .desktop-nav a:hover, .footer-links a:hover { color: var(--copper); }
+      .button { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 0 22px; border: 1px solid transparent; background: var(--copper); color: #211613; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; transition: transform .2s ease, background .2s ease; }
+      .button:hover { transform: translateY(-2px); background: #dfa17d; }
+      .button-outline { border-color: rgba(255,255,255,.6); background: transparent; color: #fffaf3; }
+      .button-outline:hover { background: rgba(255,255,255,.12); }
+      .header-actions { display: flex; align-items: center; gap: 12px; }
+      .header-admin { min-height: 42px; padding: 0 16px; border-color: rgba(255,255,255,.5); color: #fffaf3; }
+      .header-admin:hover { background: rgba(255,255,255,.12); }
+      .menu-toggle { display: none; min-height: 42px; padding: 0 14px; border: 1px solid rgba(255,255,255,.5); background: transparent; color: white; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+
+      .hero { min-height: 740px; height: min(900px, 100svh); position: relative; display: flex; align-items: center; overflow: hidden; background: var(--wine-deep); color: #fffaf3; }
+      .hero::before { position: absolute; inset: 0; content: ''; background: linear-gradient(90deg, rgba(20,13,13,.84) 0%, rgba(24,14,13,.56) 48%, rgba(20,13,13,.18) 100%), linear-gradient(0deg, rgba(20,13,13,.42), transparent 45%), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=2200&q=85') center 54% / cover; transform: scale(1.02); }
+      .hero-inner { position: relative; z-index: 1; padding-top: 84px; }
+      .hero-kicker { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; color: #e1b092; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+      .hero-kicker::before { width: 38px; height: 1px; content: ''; background: currentColor; }
+      .hero h1 { max-width: 760px; font-size: clamp(82px, 13vw, 168px); letter-spacing: 0; }
+      .hero-subtitle { max-width: 440px; margin: 20px 0 0; color: rgba(255,250,243,.82); font-size: 17px; }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+      .hero-note { display: flex; align-items: center; gap: 12px; margin-top: 72px; color: rgba(255,250,243,.78); font-size: 11px; }
+      .hero-note::before { width: 48px; height: 1px; content: ''; background: var(--copper); }
+
+      .intro { padding: 120px 0; background: var(--paper); }
+      .intro-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(42px, 8vw, 112px); }
+      .intro h2 { max-width: 520px; font-size: clamp(44px, 6vw, 72px); }
+      .intro .section-copy { margin-top: 25px; }
+      .intro-image { position: relative; min-height: 460px; }
+      .intro-image img { width: 100%; height: 460px; object-fit: cover; }
+      .image-note { position: absolute; right: -18px; bottom: 25px; width: 190px; padding: 18px 20px; background: var(--wine); color: white; font-family: var(--serif); font-size: 22px; line-height: 1.1; }
+      .image-note small { display: block; margin-bottom: 8px; color: #e5ae8d; font-family: var(--sans); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
+
+      .menu-section { padding: 112px 0 124px; background: var(--paper-bright); }
+      .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 38px; }
+      .section-heading .section-copy { max-width: 360px; margin: 0 0 5px; }
+      .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
+      .filter-button { min-height: 40px; padding: 0 16px; border: 1px solid var(--line); background: transparent; color: var(--muted); font-size: 11px; transition: all .2s ease; }
+      .filter-button:hover, .filter-button[aria-pressed="true"] { border-color: var(--wine); background: var(--wine); color: white; }
+      .dish-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 22px; }
+      .dish-card { min-width: 0; border-bottom: 1px solid var(--line); padding-bottom: 20px; animation: reveal .35s ease both; }
+      .dish-card[hidden] { display: none; }
+      .dish-photo { width: 100%; aspect-ratio: 1.35; object-fit: cover; background: #ded5c9; }
+      .dish-topline { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-top: 15px; }
+      .dish-name { margin: 0; font-family: var(--serif); font-size: 29px; font-weight: 600; line-height: 1.1; }
+      .dish-price { flex: 0 0 auto; color: var(--wine); font-size: 14px; font-weight: 700; }
+      .dish-description { margin: 10px 0 0; color: var(--muted); font-size: 13px; }
+
+      .reservation { padding: 110px 0; background: var(--wine-deep); color: #fffaf3; }
+      .reservation-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(40px, 8vw, 110px); align-items: start; }
+      .reservation h2 { font-size: clamp(48px, 6vw, 74px); }
+      .reservation-copy { max-width: 360px; color: rgba(255,250,243,.7); }
+      .booking-form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+      .field { display: flex; flex-direction: column; gap: 7px; }
+      .field-wide { grid-column: 1 / -1; }
+      .field label { color: #e4b18f; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+      .field input, .field select, .field textarea { width: 100%; min-height: 48px; padding: 11px 13px; border: 1px solid rgba(255,255,255,.24); border-radius: 0; background: rgba(255,255,255,.06); color: #fffaf3; }
+      .field input::placeholder, .field textarea::placeholder { color: rgba(255,250,243,.48); }
+      .field select option { color: var(--ink); }
+      .field textarea { min-height: 86px; resize: vertical; }
+      .booking-form .button { justify-self: start; }
+      .form-message { min-height: 24px; margin: 0; color: #e4b18f; font-size: 13px; }
+
+      .gallery { padding: 110px 0 120px; background: var(--sage); color: #fffaf3; }
+      .gallery .eyebrow { color: #f1c5a6; }
+      .gallery-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 34px; }
+      .gallery-heading p { max-width: 330px; margin: 0; color: rgba(255,250,243,.8); font-size: 13px; }
+      .gallery-grid { display: grid; grid-template-columns: 1.25fr .75fr .75fr; grid-template-rows: 220px 220px; gap: 12px; }
+      .gallery-grid img { width: 100%; height: 100%; object-fit: cover; }
+      .gallery-grid img:first-child { grid-row: span 2; }
+
+      .team { padding: 110px 0 120px; background: var(--paper-bright); }
+      .team-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px 20px; }
+      .team-card { min-width: 0; border-bottom: 1px solid var(--line); padding-bottom: 18px; }
+      .team-photo { width: 100%; aspect-ratio: 4 / 4.6; object-fit: cover; background: #ded5c9; }
+      .team-name { margin: 16px 0 3px; font-family: var(--serif); font-size: 27px; font-weight: 600; line-height: 1.1; }
+      .team-role { margin: 0; color: var(--muted); font-size: 11px; }
+      .team-contacts { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 15px; }
+      .team-contacts a { display: inline-flex; align-items: center; gap: 6px; color: var(--wine); font-size: 11px; transition: color .2s ease; }
+      .team-contacts a:hover { color: var(--copper); }
+      .team-contacts svg { width: 16px; height: 16px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
+      .team-demo-note { margin: 24px 0 0; color: var(--muted); font-size: 11px; }
+
+      .visit { padding: 100px 0; background: var(--paper); }
+      .visit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+      .visit h2 { font-size: clamp(48px, 6vw, 72px); }
+      .visit-details { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 36px; padding-top: 14px; }
+      .visit-details dt { margin-bottom: 6px; color: var(--wine); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+      .visit-details dd { margin: 0; color: var(--muted); font-size: 14px; }
+      .site-footer { padding: 30px 0; background: #171312; color: rgba(255,250,243,.75); }
+      .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+      .footer-brand { color: #fffaf3; }
+      .footer-links { display: flex; flex-wrap: wrap; gap: 22px; font-size: 11px; }
+      .copyright { font-size: 10px; }
+      .admin-link { color: rgba(255,250,243,.58); font-size: 10px; }
+      .admin-link:hover { color: var(--copper); }
+      .mobile-panel { display: none; }
+      .mobile-panel[hidden] { display: none; }
+
+      .admin-overlay { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 24px; background: rgba(20,13,13,.72); }
+      .admin-overlay[hidden] { display: none; }
+      .admin-dialog { width: min(1080px, 100%); max-height: min(820px, calc(100svh - 48px)); overflow-y: auto; background: var(--paper-bright); box-shadow: 0 24px 90px rgba(0,0,0,.3); }
+      .admin-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 26px 30px; border-bottom: 1px solid var(--line); }
+      .admin-header .eyebrow { margin-bottom: 5px; }
+      .admin-header-actions { display: flex; align-items: center; gap: 10px; }
+      .admin-title { font-size: 46px; }
+      .admin-close { width: 42px; height: 42px; flex: 0 0 auto; border: 1px solid var(--line); background: transparent; color: var(--ink); font-size: 24px; line-height: 1; }
+      .admin-close:hover { border-color: var(--wine); color: var(--wine); }
+      .admin-logout { min-height: 42px; padding: 0 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); font-size: 10px; }
+      .admin-logout[hidden] { display: none; }
+      .admin-login { display: grid; gap: 20px; max-width: 440px; margin: 0 auto; padding: 36px 30px 42px; }
+      .admin-login[hidden], .admin-workspace[hidden], .admin-view[hidden] { display: none; }
+      .admin-login-copy { margin: 0; color: var(--muted); font-size: 13px; }
+      .admin-login-form { display: grid; gap: 13px; }
+      .admin-login-form .button { justify-self: start; }
+      .admin-tabs { display: flex; gap: 6px; padding: 18px 30px 0; border-bottom: 1px solid var(--line); }
+      .admin-tab { min-height: 42px; padding: 0 16px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); font-size: 12px; }
+      .admin-tab[aria-pressed="true"] { border-bottom-color: var(--wine); color: var(--wine); font-weight: 700; }
+      .admin-tab-count { display: inline-grid; min-width: 20px; height: 20px; margin-left: 6px; place-items: center; border-radius: 50%; background: var(--wine); color: white; font-size: 10px; }
+      .bookings-view { padding: 24px 30px 34px; }
+      .bookings-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 10px; }
+      .bookings-heading .admin-section-title { margin: 0; }
+      .booking-refresh { width: 38px; height: 38px; border: 1px solid var(--line); background: transparent; color: var(--ink); font-size: 18px; }
+      .booking-list { display: grid; }
+      .booking-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+      .booking-item[data-status="done"] { opacity: .68; }
+      .booking-name { margin: 0; font-family: var(--serif); font-size: 25px; font-weight: 600; line-height: 1.15; }
+      .booking-meta { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+      .booking-note { margin: 11px 0 0; padding-left: 12px; border-left: 2px solid var(--copper); color: var(--ink); font-size: 13px; white-space: pre-wrap; }
+      .booking-date-created { margin: 9px 0 0; color: var(--muted); font-size: 10px; }
+      .booking-status { display: inline-block; margin-top: 10px; color: var(--wine); font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+      .booking-item .admin-action { align-self: start; }
+      .booking-empty { margin: 0; padding: 24px 0; color: var(--muted); font-size: 13px; }
+      .admin-summary { display: flex; flex-wrap: wrap; gap: 28px; padding: 17px 30px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+      .admin-summary strong { color: var(--wine); }
+      .admin-layout { display: grid; grid-template-columns: minmax(250px, .75fr) 1.25fr; gap: 34px; padding: 28px 30px 34px; }
+      .admin-section-title { margin: 0 0 18px; font-family: var(--serif); font-size: 28px; font-weight: 600; }
+      .admin-form { display: grid; gap: 13px; }
+      .admin-field { display: grid; gap: 5px; }
+      .admin-field label { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+      .admin-field input, .admin-field select, .admin-field textarea { width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 0; background: white; color: var(--ink); font-size: 13px; }
+      .admin-field textarea { min-height: 76px; resize: vertical; }
+      .admin-form-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 3px; }
+      .admin-form .button { min-height: 42px; padding-inline: 15px; }
+      .admin-cancel { min-height: 42px; padding: 0 14px; border: 1px solid var(--line); background: transparent; color: var(--ink); font-size: 11px; }
+      .admin-cancel[hidden] { display: none; }
+      .admin-message { min-height: 20px; margin: 0; color: var(--wine); font-size: 12px; }
+      .admin-list { display: grid; gap: 9px; }
+      .admin-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+      .admin-item[data-unavailable="true"] { opacity: .58; }
+      .admin-item-name { margin: 0; font-family: var(--serif); font-size: 21px; font-weight: 600; line-height: 1.1; }
+      .admin-item-meta { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
+      .admin-item-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+      .admin-action { min-height: 34px; padding: 0 9px; border: 1px solid var(--line); background: transparent; color: var(--ink); font-size: 10px; }
+      .admin-action:hover { border-color: var(--wine); color: var(--wine); }
+      .admin-empty { margin: 0; padding: 24px 0; color: var(--muted); font-size: 13px; }
+
+      @keyframes reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+      @media (max-width: 900px) {
+        .desktop-nav { gap: 18px; }
+        .header-booking { display: none; }
+        .intro-grid, .reservation-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+        .dish-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .gallery-grid { grid-template-rows: 180px 180px; }
+        .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 680px) {
+        html { scroll-padding-top: 72px; }
+        .wrap { width: min(100% - 36px, 520px); }
+        .header-inner { min-height: 72px; }
+        .brand { font-size: 26px; }
+        .desktop-nav, .header-booking { display: none; }
+        .menu-toggle { display: inline-flex; align-items: center; }
+        .mobile-panel { position: fixed; inset: 72px 0 0; z-index: 9; display: flex; flex-direction: column; gap: 0; padding: 18px 24px 30px; background: #211416; color: #fffaf3; }
+        .mobile-panel a { padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,.14); font-family: var(--serif); font-size: 28px; }
+        .mobile-panel .button { margin-top: 22px; font-family: var(--sans); font-size: 11px; }
+        .hero { min-height: 690px; height: 92svh; max-height: 850px; }
+        .hero::before { background-position: 58% center; }
+        .hero-inner { padding-top: 60px; }
+        .hero h1 { font-size: clamp(76px, 22vw, 112px); }
+        .hero-subtitle { max-width: 330px; font-size: 15px; }
+        .hero-note { margin-top: 54px; }
+        .intro, .menu-section, .reservation, .gallery, .team { padding-block: 78px; }
+        .intro-grid, .reservation-grid, .visit-grid { grid-template-columns: 1fr; gap: 34px; }
+        .intro-image { min-height: 350px; margin-right: 12px; }
+        .intro-image img { height: 350px; }
+        .image-note { right: -12px; bottom: 16px; width: 158px; font-size: 19px; }
+        .section-heading, .gallery-heading { display: block; }
+        .section-heading .section-copy, .gallery-heading p { margin-top: 18px; }
+        .dish-grid { grid-template-columns: 1fr; gap: 26px; }
+        .dish-photo { aspect-ratio: 1.55; }
+        .team-grid { gap: 24px 14px; }
+        .team-name { font-size: 23px; }
+        .team-contacts { gap: 9px 12px; }
+        .filters { flex-wrap: nowrap; overflow-x: auto; padding: 2px 0 8px; scrollbar-width: thin; }
+        .filter-button { flex: 0 0 auto; }
+        .booking-form { grid-template-columns: 1fr; }
+        .field-wide { grid-column: auto; }
+        .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 220px 150px 150px; }
+        .gallery-grid img:first-child { grid-row: span 2; }
+        .visit { padding: 78px 0; }
+        .visit-details { gap: 24px 18px; }
+        .footer-inner { align-items: flex-start; flex-direction: column; }
+        .footer-links { gap: 14px 20px; }
+        .admin-overlay { padding: 10px; }
+        .admin-dialog { max-height: calc(100svh - 20px); }
+        .admin-header { padding: 20px; }
+        .admin-title { font-size: 38px; }
+        .admin-login { padding: 26px 20px 30px; }
+        .admin-summary { gap: 12px 20px; padding: 14px 20px; }
+        .admin-tabs { padding: 12px 20px 0; }
+        .admin-layout { grid-template-columns: 1fr; gap: 28px; padding: 22px 20px 26px; }
+        .admin-item { grid-template-columns: 1fr; gap: 10px; }
+        .admin-item-actions { justify-content: flex-start; }
+        .bookings-view { padding: 20px; }
+        .booking-item { grid-template-columns: 1fr; gap: 10px; }
+        .booking-item .admin-action { justify-self: start; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="#home" aria-label="Borcelle, на главную"><span class="brand-mark" aria-hidden="true">B</span>BORCELLE</a>
+        <nav class="desktop-nav" aria-label="Основная навигация">
+          <a href="#story">О ресторане</a>
+          <a href="#menu">Меню</a>
+          <a href="#gallery">Атмосфера</a>
+          <a href="#team">Команда</a>
+          <a href="#visit">Контакты</a>
+        </nav>
+        <div class="header-actions">
+          <button class="button button-outline header-admin admin-link" type="button">Войти</button>
+          <a class="button header-booking" href="#reservation">Забронировать стол</a>
+        </div>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav">Меню</button>
+      </div>
+      <nav class="mobile-panel" id="mobile-nav" aria-label="Мобильная навигация" hidden>
+        <a href="#story">О ресторане</a>
+        <a href="#menu">Меню</a>
+        <a href="#gallery">Атмосфера</a>
+        <a href="#team">Команда</a>
+        <a href="#visit">Контакты</a>
+        <a class="button" href="#reservation">Забронировать стол</a>
+        <button class="button button-outline admin-link" type="button">Войти в админку</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="home" aria-labelledby="hero-title">
+        <div class="wrap hero-inner">
+          <p class="hero-kicker">Ресторан авторской кухни</p>
+          <h1 class="display" id="hero-title">Borcelle</h1>
+          <p class="hero-subtitle">Вечер, созданный для хороших разговоров, сезонных вкусов и красивых поводов собраться вместе.</p>
+          <div class="hero-actions">
+            <a class="button" href="#menu">Открыть меню</a>
+            <a class="button button-outline" href="#reservation">Выбрать время</a>
+          </div>
+          <p class="hero-note">Авторская кухня · сезонные продукты · тёплый приём</p>
+        </div>
+      </section>
+
+      <section class="intro" id="story" aria-labelledby="story-title">
+        <div class="wrap intro-grid">
+          <div>
+            <p class="eyebrow">Наша философия</p>
+            <h2 class="display" id="story-title">Вкус момента. Забота в деталях.</h2>
+            <p class="section-copy">Borcelle — место, где знакомые продукты раскрываются по-новому. Мы готовим по сезону, бережно работаем с каждым ингредиентом и оставляем достаточно пространства для самого важного — вашего вечера.</p>
+            <a class="button" href="#reservation" style="margin-top: 20px">Провести вечер у нас</a>
+          </div>
+          <div class="intro-image">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1100&q=85" alt="Стол в ресторане Borcelle, сервированный к ужину" loading="lazy" />
+            <div class="image-note"><small>Меню сезона</small>Свежий взгляд на классику</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="menu-section" id="menu" aria-labelledby="menu-title">
+        <div class="wrap">
+          <div class="section-heading">
+            <div><p class="eyebrow">Из кухни Borcelle</p><h2 class="display section-title" id="menu-title">Меню</h2></div>
+            <p class="section-copy">Любимые сочетания и сезонные блюда, приготовленные из продуктов, которые не требуют лишних слов.</p>
+          </div>
+          <div class="filters" role="group" aria-label="Фильтр блюд">
+            <button class="filter-button" type="button" data-filter="all" aria-pressed="true">Всё меню</button>
+            <button class="filter-button" type="button" data-filter="starter" aria-pressed="false">Закуски</button>
+            <button class="filter-button" type="button" data-filter="main" aria-pressed="false">Основные блюда</button>
+            <button class="filter-button" type="button" data-filter="dessert" aria-pressed="false">Десерты</button>
+            <button class="filter-button" type="button" data-filter="drink" aria-pressed="false">Напитки</button>
+          </div>
+          <div class="dish-grid" aria-live="polite">
+            <article class="dish-card" data-category="starter">
+              <img class="dish-photo" src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80" alt="Буррата со спелым инжиром" loading="lazy" />
+              <div class="dish-topline"><h3 class="dish-name">Буррата и инжир</h3><span class="dish-price">1 450 сом</span></div>
+              <p class="dish-description">Спелый инжир, базилик, мёд и тёплая закваска.</p>
+            </article>
+            <article class="dish-card" data-category="starter">
+              <img class="dish-photo" src="https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=900&q=80" alt="Обжаренные кальмары с лимоном" loading="lazy" />
+              <div class="dish-topline"><h3 class="dish-name">Кальмары с лимоном</h3><span class="dish-price">1 250 сом</span></div>
+              <p class="dish-description">Лёгкая хрустящая корочка, травы и домашний айоли.</p>
+            </article>
+            <article class="dish-card" data-category="main">
+              <img class="dish-photo" src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=80" alt="Ризотто с чёрным трюфелем и пармезаном" loading="lazy" />
+              <div class="dish-topline"><h3 class="dish-name">Трюфельное ризотто</h3><span class="dish-price">1 850 сом</span></div>
+              <p class="dish-description">Рис арборио, чёрный трюфель и выдержанный пармезан.</p>
+            </article>
+            <article class="dish-card" data-category="main">
+              <img class="dish-photo" src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80" alt="Томлёная говядина с сезонным гарниром" loading="lazy" />
+              <div class="dish-topline"><h3 class="dish-name">Томлёная говядина</h3><span class="dish-price">2 650 сом</span></div>
+              <p class="dish-description">Нежное мясо, картофельный гратен и соус из красного вина.</p>
+            </article>
+            <article class="dish-card" data-category="dessert">
+              <img class="dish-photo" src="https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=900&q=80" alt="Тёплый шоколадный десерт с кремом" loading="lazy" />
+              <div class="dish-topline"><h3 class="dish-name">Шоколадный фондан</h3><span class="dish-price">850 сом</span></div>
+              <p class="dish-description">Тёплый тёмный шоколад, ванильный крем и сезонные ягоды.</p>
+            </article>
+            <article class="dish-card" data-category="drink">
+              <img class="dish-photo" src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=900&q=80" alt="Фирменный коктейль с апельсиновой цедрой" loading="lazy" />
+              <div class="dish-topline"><h3 class="dish-name">Borcelle Sour</h3><span class="dish-price">950 сом</span></div>
+              <p class="dish-description">Джин, лимон и бузина с лёгкой цитрусовой нотой.</p>
+            </article>
+          </div>
+          <p class="menu-message" id="menu-message" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section class="reservation" id="reservation" aria-labelledby="reservation-title">
+        <div class="wrap reservation-grid">
+          <div>
+            <p class="eyebrow">Ваш вечер начинается здесь</p>
+            <h2 class="display" id="reservation-title">Забронируйте стол</h2>
+            <p class="reservation-copy">Оставьте контакты и пожелания — команда Borcelle свяжется с вами, чтобы подтвердить бронирование.</p>
+          </div>
+          <form class="booking-form">
+            <div class="field field-wide"><label for="guest-name">Ваше имя</label><input id="guest-name" name="name" autocomplete="name" placeholder="Как к вам обращаться" required /></div>
+            <div class="field"><label for="guest-phone">Телефон</label><input id="guest-phone" name="phone" type="tel" autocomplete="tel" placeholder="+996" required /></div>
+            <div class="field"><label for="guest-count">Количество гостей</label><select id="guest-count" name="guests"><option>1 гость</option><option selected>2 гостя</option><option>3 гостя</option><option>4 гостя</option><option>5 гостей</option><option>6 гостей</option><option>7 и более</option></select></div>
+            <div class="field"><label for="booking-date">Дата</label><input id="booking-date" name="date" type="date" required /></div>
+            <div class="field"><label for="booking-time">Время</label><input id="booking-time" name="time" type="time" max="22:00" required /></div>
+            <div class="field field-wide"><label for="booking-note">Пожелания к вечеру</label><textarea id="booking-note" name="note" placeholder="Особый повод, предпочтения по столу"></textarea></div>
+            <button class="button" type="submit">Отправить заявку</button>
+            <p class="form-message field-wide" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="gallery" id="gallery" aria-labelledby="gallery-title">
+        <div class="wrap">
+          <div class="gallery-heading"><div><p class="eyebrow">Пространство Borcelle</p><h2 class="display section-title" id="gallery-title">Настроение вечера</h2></div><p>Приглушённый свет, любимые люди за одним столом и время, которое можно не торопить.</p></div>
+          <div class="gallery-grid">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=85" alt="Интерьер ресторана с сервированными столами" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=900&q=85" alt="Уютный зал ресторана" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=900&q=85" alt="Подача ужина при свечах" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=900&q=85" alt="Гости за общим столом" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=900&q=85" alt="Десерт от шефа" loading="lazy" />
+          </div>
+        </div>
+      </section>
+
+      <section class="team" id="team" aria-labelledby="team-title">
+        <div class="wrap">
+          <div class="section-heading">
+            <div><p class="eyebrow">Люди Borcelle</p><h2 class="display section-title" id="team-title">Наша команда</h2></div>
+            <p class="section-copy">Знакомьтесь с людьми, которые каждый день создают атмосферу и вкус Borcelle.</p>
+          </div>
+          <div class="team-grid">
+            <article class="team-card">
+              <img class="team-photo" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=85" alt="Айжан Садыкова, соучредитель Borcelle" loading="lazy" />
+              <h3 class="team-name">Айжан Садыкова</h3><p class="team-role">Соучредитель</p>
+              <div class="team-contacts">
+                <a href="tel:+996000000001" aria-label="Позвонить Айжан Садыковой: демонстрационный номер +996 000 00 00 01">+996 000 00 00 01</a>
+                <a href="mailto:a.sadykova@borcelle.example" aria-label="Написать Айжан Садыковой"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Email</span></a>
+                <a href="https://www.instagram.com/borcelle.demo.aizhan/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Айжан Садыковой"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg><span>Instagram</span></a>
+              </div>
+            </article>
+            <article class="team-card">
+              <img class="team-photo" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=85" alt="Тимур Осмонов, соучредитель Borcelle" loading="lazy" />
+              <h3 class="team-name">Тимур Осмонов</h3><p class="team-role">Соучредитель</p>
+              <div class="team-contacts">
+                <a href="tel:+996000000002" aria-label="Позвонить Тимуру Осмонову: демонстрационный номер +996 000 00 00 02">+996 000 00 00 02</a>
+                <a href="mailto:t.osmonov@borcelle.example" aria-label="Написать Тимуру Осмонову"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Email</span></a>
+                <a href="https://www.instagram.com/borcelle.demo.timur/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Тимура Осмонова"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg><span>Instagram</span></a>
+              </div>
+            </article>
+            <article class="team-card">
+              <img class="team-photo" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=700&q=85" alt="Мадина Токтосунова, администратор Borcelle" loading="lazy" />
+              <h3 class="team-name">Мадина Токтосунова</h3><p class="team-role">Администратор</p>
+              <div class="team-contacts">
+                <a href="tel:+996000000003" aria-label="Позвонить Мадине Токтосуновой: демонстрационный номер +996 000 00 00 03">+996 000 00 00 03</a>
+                <a href="mailto:m.toktosunova@borcelle.example" aria-label="Написать Мадине Токтосуновой"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Email</span></a>
+                <a href="https://www.instagram.com/borcelle.demo.madina/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Мадины Токтосуновой"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg><span>Instagram</span></a>
+              </div>
+            </article>
+            <article class="team-card">
+              <img class="team-photo" src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=700&q=85" alt="Руслан Иманалиев, администратор Borcelle" loading="lazy" />
+              <h3 class="team-name">Руслан Иманалиев</h3><p class="team-role">Администратор</p>
+              <div class="team-contacts">
+                <a href="tel:+996000000004" aria-label="Позвонить Руслану Иманалиеву: демонстрационный номер +996 000 00 00 04">+996 000 00 00 04</a>
+                <a href="mailto:r.imanaliev@borcelle.example" aria-label="Написать Руслану Иманалиеву"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Email</span></a>
+                <a href="https://www.instagram.com/borcelle.demo.ruslan/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Руслана Иманалиева"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg><span>Instagram</span></a>
+              </div>
+            </article>
+            <article class="team-card">
+              <img class="team-photo" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=700&q=85" alt="Артём Беков, шеф-повар Borcelle" loading="lazy" />
+              <h3 class="team-name">Артём Беков</h3><p class="team-role">Шеф-повар</p>
+              <div class="team-contacts">
+                <a href="tel:+996000000005" aria-label="Позвонить Артёму Бекову: демонстрационный номер +996 000 00 00 05">+996 000 00 00 05</a>
+                <a href="mailto:a.bekov@borcelle.example" aria-label="Написать Артёму Бекову"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Email</span></a>
+                <a href="https://www.instagram.com/borcelle.demo.artem/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Артёма Бекова"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg><span>Instagram</span></a>
+              </div>
+            </article>
+            <article class="team-card">
+              <img class="team-photo" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=700&q=85" alt="Эльмира Жумабаева, шеф-кондитер Borcelle" loading="lazy" />
+              <h3 class="team-name">Эльмира Жумабаева</h3><p class="team-role">Шеф-кондитер</p>
+              <div class="team-contacts">
+                <a href="tel:+996000000006" aria-label="Позвонить Эльмире Жумабаевой: демонстрационный номер +996 000 00 00 06">+996 000 00 00 06</a>
+                <a href="mailto:e.zhumabaeva@borcelle.example" aria-label="Написать Эльмире Жумабаевой"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Email</span></a>
+                <a href="https://www.instagram.com/borcelle.demo.elmira/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Эльмиры Жумабаевой"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg><span>Instagram</span></a>
+              </div>
+            </article>
+            <article class="team-card">
+              <img class="team-photo" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=700&q=85" alt="Нурбек Абдылдаев, управляющий Borcelle" loading="lazy" />
+              <h3 class="team-name">Нурбек Абдылдаев</h3><p class="team-role">Управляющий</p>
+              <div class="team-contacts">
+                <a href="tel:+996000000007" aria-label="Позвонить Нурбеку Абдылдаеву: демонстрационный номер +996 000 00 00 07">+996 000 00 00 07</a>
+                <a href="mailto:n.abdyldaev@borcelle.example" aria-label="Написать Нурбеку Абдылдаеву"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Email</span></a>
+                <a href="https://www.instagram.com/borcelle.demo.nurbek/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Нурбека Абдылдаева"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg><span>Instagram</span></a>
+              </div>
+            </article>
+          </div>
+          <p class="team-demo-note">Контакты и имена в этом разделе демонстрационные — замените их на реальные перед публикацией.</p>
+        </div>
+      </section>
+
+      <section class="visit" id="visit" aria-labelledby="visit-title">
+        <div class="wrap visit-grid">
+          <div><p class="eyebrow">Будем рады вам</p><h2 class="display" id="visit-title">До встречи в Borcelle</h2><p class="section-copy">Выберите удобное время — мы подготовим стол и позаботимся о вашем вечере.</p><a class="button" href="#reservation" style="margin-top: 20px">Забронировать стол</a></div>
+          <dl class="visit-details">
+            <div><dt>График работы</dt><dd>Ежедневно<br />6:00–23:00</dd></div>
+            <div><dt>Бронирование</dt><dd>По предварительной заявке</dd></div>
+            <div><dt>Кухня</dt><dd>Авторская европейская</dd></div>
+            <div><dt>Адрес</dt><dd>Сообщим при подтверждении брони</dd></div>
+          </dl>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-inner">
+        <a class="brand footer-brand" href="#home"><span class="brand-mark" aria-hidden="true">B</span>BORCELLE</a>
+        <nav class="footer-links" aria-label="Навигация в подвале"><a href="#story">О ресторане</a><a href="#menu">Меню</a><a href="#gallery">Атмосфера</a><a href="#team">Команда</a><a href="#reservation">Бронирование</a><a href="#visit">Контакты</a><a class="admin-link" href="#admin-panel">Управление меню</a></nav>
+        <span class="copyright">© <span id="year"></span> Borcelle</span>
+      </div>
+    </footer>
+
+    <div class="admin-overlay" id="admin-panel" hidden>
+      <section class="admin-dialog" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+        <header class="admin-header">
+          <div><p class="eyebrow">Borcelle · управление</p><h2 class="display admin-title" id="admin-title">Панель администратора</h2></div>
+          <div class="admin-header-actions"><button class="admin-logout" id="admin-logout" type="button" hidden>Выйти</button><button class="admin-close" type="button" aria-label="Закрыть панель" title="Закрыть">×</button></div>
+        </header>
+        <section class="admin-login" id="admin-login" aria-labelledby="admin-login-title">
+          <div><h3 class="admin-section-title" id="admin-login-title">Вход</h3><p class="admin-login-copy">Войдите, чтобы просматривать заявки и управлять меню.</p></div>
+          <form class="admin-login-form" id="admin-login-form">
+            <div class="admin-field"><label for="admin-login-name">Логин</label><input id="admin-login-name" name="login" autocomplete="username" required /></div>
+            <div class="admin-field"><label for="admin-login-password">Пароль</label><input id="admin-login-password" name="password" type="password" autocomplete="current-password" required /></div>
+            <button class="button" type="submit">Войти</button>
+            <p class="admin-message" id="admin-login-message" aria-live="polite"></p>
+          </form>
+        </section>
+        <div class="admin-workspace" id="admin-workspace" hidden>
+          <div class="admin-summary" aria-live="polite"><span>Всего блюд: <strong id="admin-total">0</strong></span><span>В меню: <strong id="admin-published">0</strong></span><span>Новые заявки: <strong id="admin-booking-count">0</strong></span></div>
+          <div class="admin-tabs" role="group" aria-label="Разделы админ-панели">
+            <button class="admin-tab" type="button" data-admin-view="menu" aria-pressed="true">Меню</button>
+            <button class="admin-tab" type="button" data-admin-view="bookings" aria-pressed="false">Бронирования <span class="admin-tab-count" id="booking-tab-count">0</span></button>
+          </div>
+          <section class="admin-view" id="admin-view-menu">
+            <div class="admin-layout">
+              <section aria-labelledby="admin-form-title">
+                <h3 class="admin-section-title" id="admin-form-title">Новое блюдо</h3>
+                <form class="admin-form" id="admin-form">
+                  <div class="admin-field"><label for="dish-name-input">Название</label><input id="dish-name-input" name="name" required maxlength="70" /></div>
+                  <div class="admin-field"><label for="dish-category-input">Категория</label><select id="dish-category-input" name="category" required><option value="starter">Закуски</option><option value="main">Основные блюда</option><option value="dessert">Десерты</option><option value="drink">Напитки</option></select></div>
+                  <div class="admin-field"><label for="dish-price-input">Цена, сом</label><input id="dish-price-input" name="price" type="number" min="0" step="1" required /></div>
+                  <div class="admin-field"><label for="dish-image-input">Ссылка на фото (HTTPS)</label><input id="dish-image-input" name="image" type="url" placeholder="https://..." required /></div>
+                  <div class="admin-field"><label for="dish-description-input">Описание</label><textarea id="dish-description-input" name="description" maxlength="180" required></textarea></div>
+                  <div class="admin-form-actions"><button class="button" type="submit" id="admin-submit">Добавить блюдо</button><button class="admin-cancel" type="button" id="admin-cancel" hidden>Отмена</button></div>
+                  <p class="admin-message" id="admin-message" aria-live="polite"></p>
+                </form>
+              </section>
+              <section aria-labelledby="admin-list-title">
+                <h3 class="admin-section-title" id="admin-list-title">Позиции меню</h3>
+                <div class="admin-list" id="admin-list"></div>
+              </section>
+            </div>
+          </section>
+          <section class="admin-view" id="admin-view-bookings" hidden aria-labelledby="booking-list-title">
+            <div class="bookings-view">
+              <div class="bookings-heading"><h3 class="admin-section-title" id="booking-list-title">Заявки на бронирование</h3><button class="booking-refresh" id="booking-refresh" type="button" aria-label="Обновить заявки" title="Обновить">↻</button></div>
+              <p class="admin-message" id="booking-message" aria-live="polite"></p>
+              <div class="booking-list" id="booking-list" aria-live="polite"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const menuToggle = document.querySelector('.menu-toggle');
+      const mobileNav = document.querySelector('#mobile-nav');
+      const bookingForm = document.querySelector('.booking-form');
+      const dateInput = document.querySelector('#booking-date');
+      const dishGrid = document.querySelector('.dish-grid');
+      const menuMessage = document.querySelector('#menu-message');
+      const adminPanel = document.querySelector('#admin-panel');
+      const adminForm = document.querySelector('#admin-form');
+      const adminList = document.querySelector('#admin-list');
+      const adminMessage = document.querySelector('#admin-message');
+      const adminLogin = document.querySelector('#admin-login');
+      const adminLoginForm = document.querySelector('#admin-login-form');
+      const adminLoginMessage = document.querySelector('#admin-login-message');
+      const adminWorkspace = document.querySelector('#admin-workspace');
+      const bookingList = document.querySelector('#booking-list');
+      const bookingMessage = document.querySelector('#booking-message');
+      const categoryNames = { starter: 'Закуски', main: 'Основные блюда', dessert: 'Десерты', drink: 'Напитки' };
+      const defaultDishes = [...document.querySelectorAll('.dish-card')].map((card, index) => ({
+        id: `dish-${index}`,
+        name: card.querySelector('.dish-name').textContent,
+        category: card.dataset.category,
+        price: Number(card.querySelector('.dish-price').textContent.replace(/\D/g, '')),
+        description: card.querySelector('.dish-description').textContent,
+        image: card.querySelector('.dish-photo').src,
+        available: true
+      }));
+      let dishes = defaultDishes;
+      let activeFilter = 'all';
+      let editingDishId = null;
+      let adminReturnFocus = null;
+      let bookingRecords = [];
+      let bookingRefreshTimer = null;
+
+      const formatPrice = (price) => `${Number(price).toLocaleString('ru-RU')} сом`;
+
+      function renderPublicMenu() {
+        dishGrid.replaceChildren();
+        const visibleDishes = dishes.filter((dish) => dish.available && (activeFilter === 'all' || dish.category === activeFilter));
+        if (visibleDishes.length === 0) {
+          menuMessage.textContent = dishes.length === 0
+            ? 'Меню пока пусто. Скоро здесь появятся блюда.'
+            : 'В этой категории пока нет опубликованных блюд.';
+          return;
+        }
+        menuMessage.textContent = '';
+        visibleDishes.forEach((dish) => {
+          const card = document.createElement('article');
+          card.className = 'dish-card';
+          card.dataset.category = dish.category;
+          const image = document.createElement('img');
+          image.className = 'dish-photo';
+          image.src = dish.image;
+          image.alt = dish.name;
+          image.loading = 'lazy';
+          const topline = document.createElement('div');
+          topline.className = 'dish-topline';
+          const name = document.createElement('h3');
+          name.className = 'dish-name';
+          name.textContent = dish.name;
+          const price = document.createElement('span');
+          price.className = 'dish-price';
+          price.textContent = formatPrice(dish.price);
+          topline.append(name, price);
+          const description = document.createElement('p');
+          description.className = 'dish-description';
+          description.textContent = dish.description;
+          card.append(image, topline, description);
+          dishGrid.append(card);
+        });
+      }
+
+      function renderAdminList() {
+        adminList.replaceChildren();
+        document.querySelector('#admin-total').textContent = String(dishes.length);
+        document.querySelector('#admin-published').textContent = String(dishes.filter((dish) => dish.available).length);
+        if (dishes.length === 0) {
+          const empty = document.createElement('p');
+          empty.className = 'admin-empty';
+          empty.textContent = 'В меню пока нет блюд. Добавьте первую позицию.';
+          adminList.append(empty);
+          return;
+        }
+
+        dishes.forEach((dish) => {
+          const item = document.createElement('article');
+          item.className = 'admin-item';
+          item.dataset.unavailable = String(!dish.available);
+          const details = document.createElement('div');
+          const name = document.createElement('h4');
+          name.className = 'admin-item-name';
+          name.textContent = dish.name;
+          const meta = document.createElement('p');
+          meta.className = 'admin-item-meta';
+          meta.textContent = `${categoryNames[dish.category] || 'Без категории'} · ${formatPrice(dish.price)} · ${dish.available ? 'Опубликовано' : 'Скрыто'}`;
+          details.append(name, meta);
+          const actions = document.createElement('div');
+          actions.className = 'admin-item-actions';
+          [['edit', 'Изменить'], ['toggle', dish.available ? 'Скрыть' : 'Опубликовать'], ['delete', 'Удалить']].forEach(([action, label]) => {
+            const button = document.createElement('button');
+            button.className = 'admin-action';
+            button.type = 'button';
+            button.dataset.action = action;
+            button.dataset.id = dish.id;
+            button.textContent = label;
+            actions.append(button);
+          });
+          item.append(details, actions);
+          adminList.append(item);
+        });
+      }
+
+      function resetAdminForm() {
+        adminForm.reset();
+        editingDishId = null;
+        document.querySelector('#admin-form-title').textContent = 'Новое блюдо';
+        document.querySelector('#admin-submit').textContent = 'Добавить блюдо';
+        document.querySelector('#admin-cancel').hidden = true;
+        adminMessage.textContent = '';
+      }
+
+      function closeAdminPanel() {
+        adminPanel.hidden = true;
+        document.body.classList.remove('menu-open');
+        adminReturnFocus?.focus();
+      }
+
+      async function apiRequest(path, options = {}) {
+        const headers = { ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...options.headers };
+        const response = await fetch(path, { ...options, headers, credentials: 'same-origin' });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || 'Не удалось связаться с сервером.');
+        return result;
+      }
+
+      async function loadMenu() {
+        try {
+          const result = await apiRequest('/api/menu');
+          dishes = result.dishes;
+          renderPublicMenu();
+        } catch (error) {
+          menuMessage.textContent = error.message;
+        }
+      }
+
+      async function loadAdminMenu() {
+        try {
+          const result = await apiRequest('/api/admin/menu');
+          dishes = result.dishes;
+          adminMessage.textContent = '';
+          renderPublicMenu();
+          renderAdminList();
+        } catch (error) {
+          adminMessage.textContent = error.message;
+          if (error.message.includes('Необходим вход')) setAdminAuthenticated(false);
+        }
+      }
+
+      function setAdminAuthenticated(isAuthenticated) {
+        adminLogin.hidden = isAuthenticated;
+        adminWorkspace.hidden = !isAuthenticated;
+        document.querySelector('#admin-logout').hidden = !isAuthenticated;
+        adminLoginMessage.textContent = '';
+        if (bookingRefreshTimer) clearInterval(bookingRefreshTimer);
+        bookingRefreshTimer = isAuthenticated ? setInterval(loadBookings, 15000) : null;
+      }
+
+      function renderBookings() {
+        bookingList.replaceChildren();
+        const newCount = bookingRecords.filter((booking) => booking.status !== 'done').length;
+        document.querySelector('#admin-booking-count').textContent = String(newCount);
+        document.querySelector('#booking-tab-count').textContent = String(newCount);
+        if (bookingRecords.length === 0) {
+          const empty = document.createElement('p');
+          empty.className = 'booking-empty';
+          empty.textContent = 'Заявок пока нет. Новые бронирования появятся здесь.';
+          bookingList.append(empty);
+          return;
+        }
+
+        bookingRecords.forEach((booking) => {
+          const item = document.createElement('article');
+          item.className = 'booking-item';
+          item.dataset.status = booking.status;
+          const details = document.createElement('div');
+          const name = document.createElement('h4');
+          name.className = 'booking-name';
+          name.textContent = booking.name;
+          const meta = document.createElement('p');
+          meta.className = 'booking-meta';
+          meta.textContent = `${booking.phone} · ${booking.guests} · ${new Date(`${booking.date}T12:00:00`).toLocaleDateString('ru-RU')} в ${booking.time}`;
+          const status = document.createElement('span');
+          status.className = 'booking-status';
+          status.textContent = booking.status === 'done' ? 'Обработана' : 'Новая заявка';
+          details.append(name, meta, status);
+          if (booking.note) {
+            const note = document.createElement('p');
+            note.className = 'booking-note';
+            note.textContent = booking.note;
+            details.append(note);
+          }
+          if (booking.createdAt) {
+            const created = document.createElement('p');
+            created.className = 'booking-date-created';
+            created.textContent = `Получена ${new Date(booking.createdAt).toLocaleString('ru-RU')}`;
+            details.append(created);
+          }
+          const action = document.createElement('button');
+          action.className = 'admin-action';
+          action.type = 'button';
+          action.dataset.bookingId = booking.id;
+          action.textContent = booking.status === 'done' ? 'Вернуть в новые' : 'Отметить обработанной';
+          item.append(details, action);
+          bookingList.append(item);
+        });
+      }
+
+      async function loadBookings() {
+        try {
+          const result = await apiRequest('/api/admin/bookings');
+          bookingRecords = result.bookings;
+          bookingMessage.textContent = '';
+          renderBookings();
+        } catch (error) {
+          bookingMessage.textContent = error.message;
+          if (error.message.includes('Необходим вход')) setAdminAuthenticated(false);
+        }
+      }
+
+      async function openAdminPanel(event) {
+        event.preventDefault();
+        adminReturnFocus = event.currentTarget;
+        adminPanel.hidden = false;
+        document.body.classList.add('menu-open');
+        setAdminAuthenticated(false);
+        document.querySelector('#admin-login-name').focus();
+        try {
+          const session = await apiRequest('/api/admin/session');
+          if (!session.authenticated) return;
+          setAdminAuthenticated(true);
+          await loadAdminMenu();
+          await loadBookings();
+        } catch {
+          adminLoginMessage.textContent = '';
+        }
+      }
+
+      menuToggle.addEventListener('click', () => {
+        const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', String(!isExpanded));
+        mobileNav.hidden = isExpanded;
+        document.body.classList.toggle('menu-open', !isExpanded);
+      });
+
+      mobileNav.addEventListener('click', (event) => {
+        if (!event.target.closest('a')) return;
+        mobileNav.hidden = true;
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('menu-open');
+      });
+
+      document.querySelectorAll('.filter-button').forEach((button) => {
+        button.addEventListener('click', () => {
+          activeFilter = button.dataset.filter;
+          document.querySelectorAll('.filter-button').forEach((item) => {
+            item.setAttribute('aria-pressed', String(item === button));
+          });
+          renderPublicMenu();
+        });
+      });
+
+      document.querySelectorAll('.admin-link').forEach((link) => {
+        link.addEventListener('click', openAdminPanel);
+      });
+
+      adminLoginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const submitButton = adminLoginForm.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        adminLoginMessage.textContent = '';
+        const credentials = new FormData(adminLoginForm);
+        try {
+          await apiRequest('/api/admin/login', {
+            method: 'POST',
+            body: JSON.stringify({ login: credentials.get('login'), password: credentials.get('password') })
+          });
+          adminLoginForm.reset();
+          setAdminAuthenticated(true);
+          await loadAdminMenu();
+          await loadBookings();
+        } catch (error) {
+          adminLoginMessage.textContent = error.message;
+        } finally {
+          submitButton.disabled = false;
+        }
+      });
+
+      document.querySelector('#admin-logout').addEventListener('click', async () => {
+        try {
+          await apiRequest('/api/admin/logout', { method: 'POST' });
+        } catch {
+          adminLoginMessage.textContent = 'Сеанс завершён.';
+        } finally {
+          setAdminAuthenticated(false);
+          bookingRecords = [];
+          document.querySelector('#admin-view-menu').hidden = false;
+          document.querySelector('#admin-view-bookings').hidden = true;
+          document.querySelectorAll('.admin-tab').forEach((tab) => tab.setAttribute('aria-pressed', String(tab.dataset.adminView === 'menu')));
+        }
+      });
+
+      document.querySelectorAll('.admin-tab').forEach((tab) => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.admin-tab').forEach((item) => item.setAttribute('aria-pressed', String(item === tab)));
+          document.querySelector('#admin-view-menu').hidden = tab.dataset.adminView !== 'menu';
+          document.querySelector('#admin-view-bookings').hidden = tab.dataset.adminView !== 'bookings';
+          if (tab.dataset.adminView === 'bookings') loadBookings();
+          else loadAdminMenu();
+        });
+      });
+
+      document.querySelector('#booking-refresh').addEventListener('click', loadBookings);
+      bookingList.addEventListener('click', async (event) => {
+        const button = event.target.closest('button[data-booking-id]');
+        if (!button) return;
+        button.disabled = true;
+        try {
+          await apiRequest(`/api/admin/bookings/${encodeURIComponent(button.dataset.bookingId)}/status`, { method: 'PATCH' });
+          await loadBookings();
+        } catch (error) {
+          bookingMessage.textContent = error.message;
+          button.disabled = false;
+        }
+      });
+
+      document.querySelector('.admin-close').addEventListener('click', closeAdminPanel);
+      adminPanel.addEventListener('click', (event) => {
+        if (event.target === adminPanel) closeAdminPanel();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !adminPanel.hidden) closeAdminPanel();
+      });
+
+      adminForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(adminForm);
+        let imageUrl;
+        try {
+          imageUrl = new URL(formData.get('image').trim());
+          if (imageUrl.protocol !== 'https:') throw new Error('HTTPS required');
+        } catch {
+          adminMessage.textContent = 'Укажите корректную ссылку на фото с HTTPS.';
+          return;
+        }
+
+        const dishData = {
+          name: formData.get('name').trim(),
+          category: formData.get('category'),
+          price: Number(formData.get('price')),
+          description: formData.get('description').trim(),
+          image: imageUrl.href
+        };
+        const submitButton = document.querySelector('#admin-submit');
+        submitButton.disabled = true;
+        try {
+          await apiRequest(
+            editingDishId ? `/api/admin/menu/${encodeURIComponent(editingDishId)}` : '/api/admin/menu',
+            { method: editingDishId ? 'PATCH' : 'POST', body: JSON.stringify(dishData) }
+          );
+          await loadAdminMenu();
+          resetAdminForm();
+        } catch (error) {
+          adminMessage.textContent = error.message;
+        } finally {
+          submitButton.disabled = false;
+        }
+      });
+
+      document.querySelector('#admin-cancel').addEventListener('click', resetAdminForm);
+      adminList.addEventListener('click', async (event) => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        const dish = dishes.find((item) => item.id === button.dataset.id);
+        if (!dish) return;
+
+        if (button.dataset.action === 'edit') {
+          editingDishId = dish.id;
+          adminForm.elements.name.value = dish.name;
+          adminForm.elements.category.value = dish.category;
+          adminForm.elements.price.value = dish.price;
+          adminForm.elements.image.value = dish.image;
+          adminForm.elements.description.value = dish.description;
+          document.querySelector('#admin-form-title').textContent = 'Изменить блюдо';
+          document.querySelector('#admin-submit').textContent = 'Сохранить';
+          document.querySelector('#admin-cancel').hidden = false;
+          adminMessage.textContent = '';
+          document.querySelector('#dish-name-input').focus();
+          return;
+        }
+
+        if (button.dataset.action === 'delete' && !window.confirm(`Удалить блюдо «${dish.name}»?`)) return;
+        button.disabled = true;
+        try {
+          if (button.dataset.action === 'delete') {
+            await apiRequest(`/api/admin/menu/${encodeURIComponent(dish.id)}`, { method: 'DELETE' });
+          } else if (button.dataset.action === 'toggle') {
+            await apiRequest(`/api/admin/menu/${encodeURIComponent(dish.id)}/availability`, {
+              method: 'PATCH',
+              body: JSON.stringify({ available: !dish.available })
+            });
+          }
+          await loadAdminMenu();
+          if (editingDishId === dish.id && button.dataset.action === 'delete') resetAdminForm();
+        } catch (error) {
+          adminMessage.textContent = error.message;
+          button.disabled = false;
+        }
+      });
+
+      const today = new Date();
+      dateInput.min = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+      document.querySelector('#year').textContent = String(today.getFullYear());
+      renderPublicMenu();
+      loadMenu();
+
+      bookingForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formMessage = bookingForm.querySelector('.form-message');
+        const submitButton = bookingForm.querySelector('button[type="submit"]');
+        const formData = new FormData(bookingForm);
+        const booking = Object.fromEntries(formData.entries());
+        submitButton.disabled = true;
+        formMessage.textContent = 'Отправляем заявку…';
+        try {
+          await apiRequest('/api/bookings', { method: 'POST', body: JSON.stringify(booking) });
+          formMessage.textContent = `${booking.name.trim()}, заявка принята. Мы свяжемся с вами для подтверждения.`;
+          bookingForm.reset();
+          dateInput.min = new Date().toISOString().slice(0, 10);
+        } catch (error) {
+          formMessage.textContent = `${error.message} Заявка не отправлена.`;
+        } finally {
+          submitButton.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
